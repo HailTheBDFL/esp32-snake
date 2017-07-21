@@ -30,6 +30,7 @@ boolean start = false; //will not start without say-so
 unsigned long offsetT = 0; //time delay for touch
 unsigned long offsetM = 0; //time delay for main loop
 
+float gs;
 int headX = 1;        //coordinates for head
 int headY = 1;
 int beenHeadX[470];   //coordinates to clear later
@@ -49,6 +50,8 @@ boolean clearScore = false;
 Adafruit_ILI9341 tft = Adafruit_ILI9341(_cs, _dc, _mosi, _sclk, _rst, _miso);
 
 void setup() {
+  gs = 1000 / gameSpeed; //calculated gameSpeed in milliseconds
+  
   memset(beenHeadX, 0, 470); //initiate beenHead with a bunch of zeros
   memset(beenHeadY, 0, 470);
   
@@ -84,7 +87,7 @@ void loop() {
     printScore();             //your own score
     clearScore = false;
   }
-  if (millis() - offsetM > (1000/gameSpeed + 25) and start) {
+  if (millis() - offsetM > gs and start) {
     beenHeadX[loopCount] = headX;  //adds current head coordinates to be
     beenHeadY[loopCount] = headY;  //covered later
     
@@ -195,7 +198,7 @@ void printScore() {
 }
 
 void up() {
-  if (millis() - offsetT > 75 and lastMoveH) { //lastMoveH makes sure you can't go back on yourself
+  if (millis() - offsetT > gs and lastMoveH) { //lastMoveH makes sure you can't go back on yourself
     changeX = 0;   //changes the direction of the snake
     changeY = -1;
     offsetT = millis();
@@ -204,7 +207,7 @@ void up() {
 }
 
 void down() {
-  if (millis() - offsetT > 75 and lastMoveH) {
+  if (millis() - offsetT > gs and lastMoveH) {
     changeX = 0;
     changeY = 1;
     offsetT = millis();
@@ -213,7 +216,7 @@ void down() {
 }
 
 void left() {
-  if (millis() - offsetT > 75 and !lastMoveH) {
+  if (millis() - offsetT > gs and !lastMoveH) {
     changeX = -1;
     changeY = 0;
     offsetT = millis();
@@ -222,7 +225,7 @@ void left() {
 }
 
 void right() {
-  if (millis() - offsetT > 75 and !lastMoveH) {
+  if (millis() - offsetT > gs and !lastMoveH) {
     changeX = 1;
     changeY = 0;
     offsetT = millis();
@@ -231,7 +234,7 @@ void right() {
 }
 
 void select() {
-  if (millis() - offsetT > 75 and !start) {
+  if (millis() - offsetT > gs and !start) {
     tft.fillRect(80, 90, 126, 24, ILI9341_BLUE); //Erase start message
     start = true;                                //allows loop to start
     offsetT = millis();
