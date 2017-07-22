@@ -165,6 +165,9 @@ void endGame() {
   tft.setTextColor(ILI9341_BLACK); //sets back to scoreboard settings
   tft.setTextSize(2);
   
+  tft.setCursor(5, 3);
+  tft.print("Length: ");
+  
   headX = 1;              //reset snake
   headY = 1;
   changeX = 0;
